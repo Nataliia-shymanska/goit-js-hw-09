@@ -1,4 +1,4 @@
-const formData = {
+let formData = {
   email: '',
   message: '',
 };
@@ -18,18 +18,27 @@ const loadFormData = () => {
 const saveFormData = () => {
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
 };
+const trimData = data => {
+  return data.trim();
+};
 
 feedbackEl.addEventListener('input', e => {
-  formData[e.target.name] = e.target.value;
+  formData[e.target.name] = trimData(e.target.value);
   saveFormData();
 });
 
 feedbackEl.addEventListener('submit', e => {
   e.preventDefault();
-  if (!formData.email || !formData.message) {
+  const email = trimData(feedbackEl.elements.email.value);
+  const message = trimData(textareaEL.value);
+
+  if (!email || !message) {
     alert('Fill please all fields');
     return;
   }
+
+  formData.email = email;
+  formData.message = message;
   console.log(formData);
   localStorage.removeItem('feedback-form-state');
   formData = { email: '', message: '' };
